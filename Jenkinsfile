@@ -3,20 +3,20 @@ pipeline {
     options{
         ansiColor('xterm')
     }
-    // environment{
-    //     packageVersion = ''
-    // }
+    environment{
+        packageVersion = '1.0.3'
+    }
     stages {
         // push to featire branch
-        // stage('Get Version'){
-        //     steps{
-        //         script{
-        //             def packageJson = readJSON(file: 'package.json')
-        //             packageVersion = packageJson.version
-        //             echo "${packageVersion}"
-        //         }
-        //     }
-        // }
+        stage('Get Version'){
+            steps{
+                script{
+                    def packageJson = readJSON(file: 'package.json')
+                    packageVersion = packageJson.version
+                    echo "${packageVersion}"
+                }
+            }
+        }
         stage('Install Dependencies') {
             steps {
                 sh 'npm install'
@@ -43,7 +43,7 @@ pipeline {
         stage('SAST'){
             steps{
                 echo "SAST DOne"
-                // echo "package version: $packageVersion"
+                echo "package version: $packageVersion"
             }
         }
         // install pipeline utility steps plugin
@@ -54,7 +54,7 @@ pipeline {
                 protocol: 'http',
                 nexusUrl: '54.198.223.94:8081/',
                 groupId: 'com.roboshop',
-                version: "1.0.1",
+                version: "$packageVersion",
                 repository: 'catalogue',
                 credentialsId: 'nexus-auth',
                 artifacts: [
@@ -68,18 +68,18 @@ pipeline {
         }
         // here i need to configure downstream job. i have to pass pkg version for deployment
         // this job will wait until downstream job is over
-        // stage('Deploy'){
-        //     steps{
-        //         script{
-        //             echo "Deployment"
-        //             def params = [
-        //                 string(name: 'version', value: "$packageVersion")
-        //             ]
-        //             // build job: "../catalogue-deploy", wait: true, parameters: params
-        //         }
+        stage('Deploy'){
+            steps{
+                script{
+                    echo "Deployment"
+                    def params = [
+                        string(name: 'version', value: "$packageVersion")
+                    ]
+                    // build job: "../catalogue-deploy", wait: true, parameters: params
+                }
                 
-        //     }
-        // }
+            }
+        }
 
     }
     // post{
