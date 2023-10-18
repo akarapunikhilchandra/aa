@@ -58,9 +58,9 @@ pipeline {
                 repository: 'aa',
                 credentialsId: 'nexus-auth',
                 artifacts: [
-                    [artifactId: 'aa',
+                    [artifactId: 'catalogue',
                     classifier: '',
-                    file: 'aa.zip',
+                    file: 'catalogue.zip',
                     type: 'zip']
                 ]
             )
