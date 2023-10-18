@@ -4,7 +4,7 @@ pipeline {
         ansiColor('xterm')
     }
     environment{
-        packageVersion = '1.2.2'
+        packageVersion = ''
     }
     stages {
         // push to featire branch
